@@ -1,0 +1,13 @@
+node_modules/
+dist/
+dist-web/
+data/
+logs/
+.env
+.env.*
+!.env.example
+npm-debug.log*
+.agents/
+.claude/
+.playwright-mcp/
+*.log

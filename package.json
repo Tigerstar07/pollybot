@@ -1,0 +1,66 @@
+{
+  "name": "pollybot",
+  "version": "1.0.0",
+  "description": "Safe-first prediction-market scanner and paper-trading bot for Polymarket.",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "cli": "tsx src/index.ts",
+    "scan": "tsx src/index.ts scan",
+    "diagnose": "tsx src/index.ts diagnose",
+    "paper": "tsx src/index.ts paper",
+    "settle": "tsx src/index.ts settle",
+    "trade": "tsx src/index.ts trade",
+    "live-check": "tsx src/index.ts live-check",
+    "live-sweep": "tsx src/index.ts live-sweep",
+    "arb": "tsx src/index.ts arb",
+    "live-review-open": "tsx src/index.ts live-review-open",
+    "live-opportunities": "tsx src/index.ts live-opportunities",
+    "live-close-open": "tsx src/index.ts live-close-open",
+    "daily": "tsx src/index.ts daily",
+    "report": "tsx src/index.ts report",
+    "test": "tsx --test tests/*.test.ts",
+    "evaluate": "tsx --test tests/decision-engine.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "prediction-markets",
+    "risk-management",
+    "paper-trading",
+    "react",
+    "typescript"
+  ],
+  "author": "Roberts Hartmanis",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@polymarket/clob-client-v2": "^1.1.0",
+    "better-sqlite3": "^12.11.1",
+    "dotenv": "^17.4.2",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "viem": "^2.55.5",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^26.0.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3",
+    "vite": "^8.1.0"
+  },
+  "overrides": {
+    "ws": "8.21.0",
+    "@ethersproject/providers": {
+      "ws": "8.21.0"
+    }
+  }
+}
