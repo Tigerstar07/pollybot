@@ -54,7 +54,7 @@ const BUCKET_EDGES = [0, 0.2, 0.4, 0.6, 0.8, 1.0001];
  *   Brier skill is positive only when the bot beats that relevant benchmark.
  * - Buckets compare average forecast vs realized hit rate per probability band: a
  *   well-calibrated bot has hitRate ≈ avgForecast in every bucket.
- * - returnOnStake is the realized profit per EUR 1 staked — the bottom line.
+ * - returnOnStake is the realized profit per EUR 1 staked. This is the bottom line.
  *
  * Pure function over settled rows so it can be unit-tested without a database.
  */

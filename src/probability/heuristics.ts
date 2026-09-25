@@ -582,7 +582,7 @@ function estimateSingleWeatherMarket(
   const marketDivergence = Math.abs(modelYes - marketYes);
   // Only the dangerous case: the market is itself confident (priced near an extreme) AND
   // our model takes the opposite side by a wide margin. That is fading a station-aware
-  // favorite on a grid-point forecast — the Jeddah failure. A wide gap against a *neutral*
+  // favorite on a grid-point forecast. That was the Jeddah failure. A wide gap against a *neutral*
   // market (~0.5) is a normal high-conviction edge and must NOT be suppressed.
   const marketConfident = marketYes > 0.65 || marketYes < 0.35;
   const oppositeSides = (modelYes - 0.5) * (marketYes - 0.5) < 0;
@@ -1075,7 +1075,7 @@ function weatherForecastStd(metric: string, unit: string, forecastValue: number,
     // Total uncertainty combines (a) forecast error that grows with lead time and (b) a
     // fixed "station representativeness" floor: these markets resolve on ONE specific
     // station (e.g. an airport via Wunderground), but Open-Meteo returns a grid-point
-    // forecast that can sit several degrees off — coastal/desert cities like Jeddah are
+    // forecast that can sit several degrees off. Coastal/desert cities like Jeddah are
     // the worst case. Combining in quadrature keeps single-degree bucket probabilities
     // realistic instead of spiking to ~1%/~99% on a point forecast.
     const isCelsius = unit === "celsius";

@@ -572,7 +572,7 @@ export async function mockFetch(url: string | URL, init?: RequestInit): Promise<
     });
   }
 
-  // 9c. Wikidata culture (movie/TV release dates) — must precede the news mock since the
+  // 9c. Wikidata culture (movie/TV release dates) must precede the news mock since the
   // wbsearchentities action string contains "search".
   if (urlStr.includes("wikidata.org/w/api.php")) {
     if (urlStr.includes("wbsearchentities")) {

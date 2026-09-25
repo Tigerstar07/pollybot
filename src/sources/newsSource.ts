@@ -19,6 +19,22 @@ interface GdeltResponse {
   }>;
 }
 
+// GDELT rate-limits hard: it answers HTTP 429, often after a ten second wait. Once a
+// request fails we leave GDELT alone for a while so one scan does not sit through
+// hundreds of slow failures. Google News keeps working in the meantime.
+const GDELT_COOLDOWN_MS = 10 * 60_000;
+let gdeltPausedUntil = 0;
+
+function fetchGdelt(url: URL, headers: Record<string, string>) {
+  if (Date.now() < gdeltPausedUntil) {
+    return Promise.reject(new Error("GDELT skipped after a recent rate limit or timeout"));
+  }
+  return resilientFetchJson<GdeltResponse>(url, { timeoutMs: 12_000, headers, maxRetries: 0 }).catch((error) => {
+    gdeltPausedUntil = Date.now() + GDELT_COOLDOWN_MS;
+    throw error;
+  });
+}
+
 /**
  * Free news research from two discovery paths. The probability model de-duplicates
  * publishers and requires explicit confirmation/denial language; raw article count and
@@ -42,7 +58,7 @@ export async function getNewsObservation(market: NormalizedMarket): Promise<Sour
   const headers = { "user-agent": "Mozilla/5.0 pollybot/1.2 research and paper-trading bot" };
   const [google, gdelt] = await Promise.allSettled([
     resilientFetchText(googleUrl, { timeoutMs: 12_000, headers, maxRetries: 1 }),
-    resilientFetchJson<GdeltResponse>(gdeltUrl, { timeoutMs: 12_000, headers, maxRetries: 1 }),
+    fetchGdelt(gdeltUrl, headers),
   ]);
 
   const articles: NewsArticle[] = [];

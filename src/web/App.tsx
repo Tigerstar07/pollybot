@@ -162,8 +162,8 @@ export default function App() {
           liveEnabled={Boolean(data?.safety.liveExecutionEnabled)}
         />
         <div className="page-heading">
-          <div><h1>Decision room</h1><p>Inspect evidence, uncertainty, executable prices, and every refusal before trusting the bot.</p></div>
-          <div className="data-stamp"><span className={activeRunning ? "pulse" : ""} />{activeRunning ? "Scan in progress" : `Data as of ${data ? new Date(data.generatedAt).toLocaleTimeString() : "—"}`}</div>
+          <div><h1>Decision room</h1><p>Every market from the last scan, what the evidence says, and why the bot did or did not trade it.</p></div>
+          <div className="data-stamp"><span className={activeRunning ? "pulse" : ""} />{activeRunning ? "Scan in progress" : `Data as of ${data ? new Date(data.generatedAt).toLocaleTimeString() : "-"}`}</div>
         </div>
         {error ? <div className="global-error" role="alert">{error}</div> : null}
         <div className="decision-layout">

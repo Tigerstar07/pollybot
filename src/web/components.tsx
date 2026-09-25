@@ -70,8 +70,8 @@ export function SummaryRail({
   liveEnabled: boolean;
 }) {
   const items = [
-    ["Markets scanned", String(markets)],
-    ["Candidates", String(candidates)],
+    ["Markets scanned", markets.toLocaleString("en-US")],
+    ["Candidates", candidates.toLocaleString("en-US")],
     ["Open exposure", `${money(exposure)} / ${money(maxExposure)}`],
     ["Real orders", String(liveOrders)],
   ];
@@ -165,7 +165,7 @@ export function DecisionTable({
         <table className="decision-table">
           <thead>
             <tr>
-              <th>#</th><th>Market</th><th>Side</th><th>Price</th><th>Fair</th><th>Edge after costs</th><th>Confidence</th><th>Decision</th>
+              <th>#</th><th>Market</th><th>Side</th><th>Price</th><th>Fair</th><th title="Edge after fees and slippage">Net edge</th><th>Confidence</th><th>Decision</th>
             </tr>
           </thead>
           <tbody>
@@ -378,8 +378,8 @@ export function RunHistory({ runs }: { runs: DashboardRun[] }) {
               <tr key={run.id}>
                 <td>{relativeTime(run.startedAt)}</td>
                 <td><span className={`run-status ${run.status}`}><CheckIcon /> {titleCase(run.status)}</span></td>
-                <td>{run.command}</td><td>{run.details?.marketsScanned ?? "—"}</td><td>{run.details?.candidates ?? "—"}</td>
-                <td>{run.details?.durationMs ? `${(run.details.durationMs / 1000).toFixed(1)}s` : "—"}</td>
+                <td>{run.command}</td><td>{run.details?.marketsScanned ?? "-"}</td><td>{run.details?.candidates ?? "-"}</td>
+                <td>{run.details?.durationMs ? `${(run.details.durationMs / 1000).toFixed(1)}s` : "-"}</td>
               </tr>
             ))}
           </tbody>
@@ -408,7 +408,7 @@ export function CalibrationPanel({
         <ScoreCard label="Market Brier" value={optionalFixed(forecasts.marketBrierScore, 4)} />
         <ScoreCard
           label="Brier skill"
-          value={forecasts.brierSkillScore === undefined ? "—" : signedPct(forecasts.brierSkillScore)}
+          value={forecasts.brierSkillScore === undefined ? "-" : signedPct(forecasts.brierSkillScore)}
           state={(forecasts.brierSkillScore ?? 0) > 0 ? "pass" : "pending"}
         />
         <ScoreCard label="Settled paper bets" value={String(paper.settledCount)} />
@@ -478,7 +478,7 @@ export function SettlementPanel({
               <tr key={settlement.id}>
                 <td>{settlement.title}</td>
                 <td>{settlement.outcome}</td>
-                <td>{settlement.winningOutcome ?? "—"}</td>
+                <td>{settlement.winningOutcome ?? "-"}</td>
                 <td>{money(settlement.stakeEur)}</td>
                 <td className={settlement.pnlEur >= 0 ? "positive" : "negative"}>{money(settlement.pnlEur)}</td>
                 <td>{relativeTime(settlement.settledAt)}</td>
@@ -505,7 +505,7 @@ function ScoreCard({
 }
 
 function optionalFixed(value: number | undefined, digits: number): string {
-  return value === undefined ? "—" : value.toFixed(digits);
+  return value === undefined ? "-" : value.toFixed(digits);
 }
 
 function Metric({ label, value, accent = false }: { label: string; value: string; accent?: boolean }) {
@@ -533,15 +533,15 @@ export function money(value: number): string {
 }
 
 function decimal(value: number): string {
-  return Number.isFinite(value) ? value.toFixed(3) : "—";
+  return Number.isFinite(value) ? value.toFixed(3) : "-";
 }
 
 function pct(value: number): string {
-  return Number.isFinite(value) ? `${(value * 100).toFixed(1)}%` : "—";
+  return Number.isFinite(value) ? `${(value * 100).toFixed(1)}%` : "-";
 }
 
 function signedPct(value: number): string {
-  return Number.isFinite(value) ? `${value >= 0 ? "+" : ""}${(value * 100).toFixed(1)}%` : "—";
+  return Number.isFinite(value) ? `${value >= 0 ? "+" : ""}${(value * 100).toFixed(1)}%` : "-";
 }
 
 function titleCase(value: string): string {

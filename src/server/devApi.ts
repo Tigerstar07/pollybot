@@ -20,6 +20,16 @@ import { settleResolvedMarkets } from "../trading/settlement";
 import { readDashboard, type ScanState } from "./dashboard";
 
 const scanState: ScanState = { running: false };
+let staleRunsClosed = false;
+
+// A dashboard scan only lives inside this server process. If the server restarted
+// mid-scan, its row would otherwise say "running" forever.
+function closeStaleDashboardRuns(db: ReturnType<typeof openDatabase>): void {
+  if (staleRunsClosed) return;
+  staleRunsClosed = true;
+  db.prepare("UPDATE bot_runs SET status = 'interrupted', finished_at = ? WHERE status = 'running' AND command IN ('dashboard-scan', 'dashboard-settle')")
+    .run(new Date().toISOString());
+}
 
 export async function handleDevApi(
   request: IncomingMessage,
@@ -37,6 +47,7 @@ export async function handleDevApi(
       const config = loadConfig();
       const db = openDatabase(config);
       try {
+        if (!scanState.running) closeStaleDashboardRuns(db);
         sendJson(response, 200, readDashboard(config, db, { ...scanState }));
       } finally {
         db.close();
